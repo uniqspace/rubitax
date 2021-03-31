@@ -7,9 +7,9 @@ import {
 } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import Topbar from './components/Topbar';
-import Sidebar from './components/Sidebar';
+// import Container from '@material-ui/core/Container';
+// import Topbar from './components/Topbar';
+// import Sidebar from './components/Sidebar';
 
 import Onboarding from './container/Onboarding/Onboarding';
 import Login from './container/Login/Login';
@@ -47,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
   const classes = useStyles();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  // const [mobileOpen, setMobileOpen] = React.useState(false);
+  // const handleDrawerToggle = () => {
+  //   setMobileOpen(!mobileOpen);
+  // };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      {!authenticated &&
+      {/* {!authenticated &&
       <>
         <Topbar
           mobileOpen={mobileOpen}
@@ -66,9 +66,9 @@ export default function App() {
           handleDrawerToggle={handleDrawerToggle}
         />
       </>
-      }
-      <main className={classes.content}>
-        <Container maxWidth="lg" className={!authenticated ?  classes.container : ""}>
+      } */}
+      {/* <main className={classes.content}>
+        <Container maxWidth="lg" className={!authenticated ?  classes.container : ""}> */}
           <Router>
             <Switch>
               <Redirect exact from="/" to={{pathname: '/login'}} />
@@ -77,8 +77,8 @@ export default function App() {
               <Route exact path="/forgot" component={Forgot} />
             </Switch>
           </Router>
-        </Container>
-      </main>
+        {/* </Container>
+      </main> */}
     </div>
   );
 }

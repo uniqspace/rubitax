@@ -17,10 +17,14 @@ const useStyles = makeStyles((theme) => ({
         right: 'initial',
         transform: 'scaleX(1)',
         transition: 'width 0.2s ease',
+        borderBottomWidth: 1,
       },
       '&.Mui-focused:after': {
         width: '100%',
-      }
+      },
+    },
+    '& .MuiFormLabel-root': {
+      top: 3,
     }
   }
 }));

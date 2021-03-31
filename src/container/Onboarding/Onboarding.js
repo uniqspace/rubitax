@@ -11,8 +11,24 @@ import OnboardingStep1 from './OnboardingStep1';
 import OnboardingStep2 from './OnboardingStep2';
 
 import { OnBoardingContextProvider } from './OnBoardingContext';
+import { Container } from '@material-ui/core';
+import Topbar from '../../components/Topbar';
+import Sidebar from '../../components/Sidebar';
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: '20px 12px',
+    [theme.breakpoints.up('sm')]: {
+      padding: '25px 36px',
+    },
+  },
+  content: {
+    flexGrow: 1,
+    overflow: 'auto',
+    marginTop: 88,
+    minHeight: 'calc(100vh - 88px)',
+    backgroundColor: 'white',
+  },
   paper: {
     padding: '12px 24px',
     display: 'flex',
@@ -26,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   tabHeader: {
     borderBottom: `2px solid rgba(0, 0, 0, 0.2)`,
     '&:hover': {
-      background: fade(theme.palette.primary.main, 0.2)
+      background: '#FAFAFA'
     },
     '&.Mui-selected': {
       color: '#000000',
@@ -51,6 +67,11 @@ const useStyles = makeStyles((theme) => ({
 function Onboarding(props) {
   const classes = useStyles();
 
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   const [formSubmitted, setFormSubmitted] = React.useState(false);
   const [activedTab, setActivedTab] = React.useState(0);
 
@@ -66,35 +87,49 @@ function Onboarding(props) {
   }
 
   return (
-    <OnBoardingContextProvider>
-      <Paper className={classes.paper}>
-        <Tabs
-          value={activedTab}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={handleChangeTab}
-          variant="fullWidth"
-        >
-          <Tab
-            className={classes.tabHeader}
-            label="STEP 1"
-          />
-          <Tab
-            className={classes.tabHeader}
-            label="STEP 2"
-            disabled={!formSubmitted}
-          />
-        </Tabs>
-        <TabPanel value={activedTab} index={0}>
-          <OnboardingStep1
-            moveStepTwo={moveStepTwo}
-          />
-        </TabPanel>
-        <TabPanel value={activedTab} index={1}>
-          <OnboardingStep2 />
-        </TabPanel>
-      </Paper>
-    </OnBoardingContextProvider>
+    <div style={{display: 'flex'}}>
+    <Topbar
+      mobileOpen={mobileOpen}
+      handleDrawerToggle={handleDrawerToggle}
+    />
+    <Sidebar
+      mobileOpen={mobileOpen}
+      handleDrawerToggle={handleDrawerToggle}
+    />
+    <main className={classes.content}>
+    <Container maxWidth="lg" className={classes.container}>
+      <OnBoardingContextProvider>
+        <Paper className={classes.paper}>
+          <Tabs
+            value={activedTab}
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={handleChangeTab}
+            variant="fullWidth"
+          >
+            <Tab
+              className={classes.tabHeader}
+              label="STEP 1"
+            />
+            <Tab
+              className={classes.tabHeader}
+              label="STEP 2"
+              disabled={!formSubmitted}
+            />
+          </Tabs>
+          <TabPanel value={activedTab} index={0}>
+            <OnboardingStep1
+              moveStepTwo={moveStepTwo}
+            />
+          </TabPanel>
+          <TabPanel value={activedTab} index={1}>
+            <OnboardingStep2 />
+          </TabPanel>
+        </Paper>
+      </OnBoardingContextProvider>
+      </Container>
+    </main>
+    </div>
   );
 }
 

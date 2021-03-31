@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
       height: 56,
     },
     '& .MuiInputBase-input': {
-      textAlign: 'center'
+      // textAlign: 'center'
     },
     '& .MuiFilledInput-underline:before': {
       borderBottomColor: '#E5E5E5',
@@ -65,8 +65,8 @@ const useStyles = makeStyles((theme) => ({
       transformOrigin: 'left center',
     },
     '& .MuiFormLabel-root': {
-      left: 'auto',
-      marginRight: 20,
+      // left: 'auto',
+      // marginRight: 20,
       top: 3,
     }
   },

@@ -75,6 +75,10 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: 19,
     marginBottom: 8,
+  },
+  image: {
+    width: 130,
+    height: 42,
   }
 }));
 
@@ -122,7 +126,7 @@ function Sidebar(props) {
           open={true}
         >
           <div className={classes.logo}>
-            <img src={logo} alt="Logo" />
+            <img className={classes.image} src={logo} alt="Logo" />
           </div>
           <List className={classes.list}>
             <MainListItems />

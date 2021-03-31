@@ -43,16 +43,16 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     marginBottom: 25,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // display: 'flex',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     '& .MuiInputBase-root': {
       backgroundColor: '#FBF8F8',
       borderRadius: '3px 3px 0px 0px',
       height: 56,
     },
     '& .MuiInputBase-input': {
-      textAlign: 'center'
+      // textAlign: 'center'
     },
     '& .MuiFilledInput-underline:before': {
       borderBottomColor: '#E5E5E5',
@@ -63,8 +63,8 @@ const useStyles = makeStyles((theme) => ({
       transformOrigin: 'left center',
     },
     '& .MuiFormLabel-root': {
-      left: 'auto',
-      marginRight: 20,
+      // left: 'auto',
+      // marginRight: 20,
       top: 3,
     }
   },
