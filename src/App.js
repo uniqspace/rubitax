@@ -53,7 +53,8 @@ export default function App() {
   // };
 
   return (
-    <div className={classes.root}>
+    <>
+    {/* <div className={classes.root}> */}
       <CssBaseline />
       {/* {!authenticated &&
       <>
@@ -79,6 +80,7 @@ export default function App() {
           </Router>
         {/* </Container>
       </main> */}
-    </div>
+    {/* </div> */}
+    </>
   );
 }

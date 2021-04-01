@@ -20,4 +20,11 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 700px) {
+     width: 93.6%;
+     height: 350px;
+     padding: 40px 24px;
+   }
+
 `;
