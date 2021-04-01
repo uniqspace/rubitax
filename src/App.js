@@ -12,8 +12,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // import Sidebar from './components/Sidebar';
 
 import Onboarding from './container/Onboarding/Onboarding';
-import Login from './container/Login/Login';
-import Forgot from './container/Forgot/Forgot';
+import Login from './container/Auth/Login';
+import Forgot from './container/Auth/Forgot';
 
 import './assets/font/Lato/lato.css';
 import './assets/css/style.css';

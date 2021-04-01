@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Button({text}) {
+function Button({text, className = ""}) {
   const classes = useStyles();
 
   return (
@@ -22,7 +22,7 @@ function Button({text}) {
       type="submit"
       variant="contained"
       color="primary"
-      className={classes.submitBtn}
+      className={className ? className : classes.submitBtn}
     >
       {text}
     </MaterialButton>
