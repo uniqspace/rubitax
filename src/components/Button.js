@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 3,
     '& .MuiButton-label': {
       fontWeight: 900
-    }
+    },
   }
 }));
 
