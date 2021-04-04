@@ -57,6 +57,7 @@ function Login() {
         <Input
           name="password"
           label="Password"
+          type="password"
           control={control}
           register={register}
           error={errors.password?.message}

@@ -12,6 +12,7 @@ import Topbar from './components/Topbar';
 import Sidebar from './components/Sidebar';
 
 import Onboarding from './container/Onboarding/Onboarding';
+import Forms from './container/Forms/Forms';
 
 import './assets/font/Lato/lato.css';
 import './assets/css/style.css';
@@ -67,6 +68,7 @@ export default function App() {
             <Switch>
               <Redirect exact from="/" to={{pathname: '/onboarding'}} />
               <Route exact path="/onboarding" component={Onboarding} />
+              <Route exact path="/forms" component={Forms} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/forgot" component={Forgot} />
             </Switch>

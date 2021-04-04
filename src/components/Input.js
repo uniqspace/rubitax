@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Input({
-  name, label, control, register, error, onChange, className
+  name, label, control, register, error, onChange, className, type = "text"
 }) {
   const classes = useStyles();
   return (
@@ -42,6 +42,7 @@ function Input({
         <TextField
           ref={register}
           fullWidth
+          type={type}
           label={label}
           variant="filled"
           className={clsx(classes.textField, className)}
