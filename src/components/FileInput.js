@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FileInput({
-  name, control, register, setValue, onChange
+  name, control, register, setValue, onChange, height = 330
 }) {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
@@ -122,7 +122,9 @@ function FileInput({
       defaultValue=""
       render={props => (
         <div>
-          <Box className={classes.fileUploader} {...getRootProps()}>
+          <Box style={{
+            height: height,
+          }} className={classes.fileUploader} {...getRootProps()}>
             <input
               ref={register}
               {...getInputProps()}

@@ -12,10 +12,8 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import Input from './Input';
-import Dropdown from './Dropdown';
 import Button from './Button';
-import IconButton from './IconButton';
+import UploadModal from './UploadModal';
 import UploadFileInput from './UploadFileInput';
 
 const useStyles = makeStyles((theme) => ({
@@ -72,11 +70,20 @@ const schema = yup.object().shape({
 
 export default function FileForm() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const { control, register, trigger, errors } = useForm({
     resolver: yupResolver(schema)
   });
+
   return (
     <div className={classes.root}>
       <Accordion defaultExpanded>
@@ -105,7 +112,16 @@ export default function FileForm() {
         </Grid>
         <div className={classes.buttonsContainer}>
           {/* <IconButton text="Add Form" /> */}
-          <Button className={classes.button} text="List of uploads" />
+           <UploadModal
+              open={open}
+              setOpen={setOpen}
+              name="idScreen"
+              control={control}
+              register={register}
+              setValue={() => {}}
+              onChange={() => trigger("idScreen")}
+            />
+          <Button onClick={handleOpen} className={classes.button} text="List of uploads" />
         </div>
         </Grid>
         </AccordionDetails>

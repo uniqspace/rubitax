@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Button({text, className = ""}) {
+function Button({text, className = "", onClick = () => {}}) {
   const classes = useStyles();
 
   return (
@@ -22,6 +22,7 @@ function Button({text, className = ""}) {
       type="submit"
       variant="contained"
       color="primary"
+      onClick={onClick}
       className={className ? className : classes.submitBtn}
     >
       {text}
