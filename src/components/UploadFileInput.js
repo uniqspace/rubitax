@@ -14,7 +14,7 @@ const Input = styled.div`
   justify-content: flex-end;
 `;
 
-const RightButton = styled.div`
+const RightButton = styled.label`
   width: 76.99px;
   height: 56px;
   background-color: #C4C4C4;
@@ -39,11 +39,19 @@ const Label = styled.p`
   font-size: 14px;
 `;
 
-export default function UploadFileInput() {
+export const Value = styled.p`
+  position: absolute;
+  left: 14px;
+  top: 5px;
+  font-size: 14px;
+`;
+export default function UploadFileInput({id}) {
+  const [file, setFile] = React.useState(null)
   return (
     <Input>
-    <Label>upload file</Label>
-      <RightButton>
+    {!file ? <Label>{'upload file'}</Label> : <Value>{file}</Value>}
+      <input onChange={(e) => setFile(e.nativeEvent.target.value)} type="file" id={id} name={id} style={{visibility: 'hidden'}} />
+      <RightButton for={id}>
         <BackupIcon color="white" />
       </RightButton>
     </Input>

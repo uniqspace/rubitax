@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function IconButton({text, className = "", icon, isMargined}) {
+function IconButton({text, className = "", icon, isMargined, onClick = () => {}}) {
   const classes = useStyles();
 
   return (
@@ -30,6 +30,7 @@ function IconButton({text, className = "", icon, isMargined}) {
       variant="contained"
       color="#C7C7C7"
       endIcon={icon}
+      onClick={onClick}
       style={{
         marginRight: isMargined ? 16 : 0
       }}

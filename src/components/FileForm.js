@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '38px',
     '& .MuiAccordionSummary-root': {
       border: '1px solid #EDEDED',
-      backgroundColor: '#EDEDED',
+      // backgroundColor: '#EDEDED',
       height: 57,
       padding: '0 50px',
       minHeight: '57px',
@@ -99,16 +99,16 @@ export default function FileForm() {
         <Grid item xs={12}>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <UploadFileInput />
+          <UploadFileInput id="file_input_1" />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <UploadFileInput />
+          <UploadFileInput id="file_input_2" />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <UploadFileInput />
+          <UploadFileInput id="file_input_3" />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <UploadFileInput />
+          <UploadFileInput id="file_input_4" />
         </Grid>
         <div className={classes.buttonsContainer}>
           {/* <IconButton text="Add Form" /> */}
@@ -118,6 +118,7 @@ export default function FileForm() {
               name="idScreen"
               control={control}
               register={register}
+              trigger={() => {}}
               setValue={() => {}}
               onChange={() => trigger("idScreen")}
             />

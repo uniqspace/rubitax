@@ -129,11 +129,14 @@ export default function UploadModal({control, register, setValue, trigger, open,
               register={register}
               setValue={setValue}
               onChange={() => trigger("idScreen")}
+              withoutThumbs={true}
             />
             <div className={classes.itemsContainer}>
               <UploadedItem />
               <UploadedItem />
               <UploadedItem />
+              <UploadedItem />
+
               <UploadedItem isLast />
             </div>
             <div className={classes.buttonsContainer}>

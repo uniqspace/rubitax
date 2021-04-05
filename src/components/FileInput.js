@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function FileInput({
-  name, control, register, setValue, onChange, height = 330
+  name, control, register, setValue, onChange, height = 330, withoutThumbs = false,
 }) {
   const classes = useStyles();
   const [files, setFiles] = useState([]);
@@ -135,9 +135,9 @@ function FileInput({
               <>
                 <BackupIcon style={{fontSize: 52, marginBottom: 20}} />
                 <Typography variant="body2">Drag and drop to upload file<br/>or browse</Typography>
-                <aside className={classes.thumbsContainer}>
+                {!withoutThumbs ? <aside className={classes.thumbsContainer}>
                   {thumbs}
-                </aside> 
+                </aside> : null}
               </>
             }
           </Box>

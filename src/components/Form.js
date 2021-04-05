@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     '& .MuiAccordionSummary-root': {
       border: '1px solid #EDEDED',
-      backgroundColor: '#EDEDED',
+      // backgroundColor: '#EDEDED',
       height: 57,
       padding: '0 50px',
       minHeight: '57px',
@@ -72,7 +72,7 @@ const schema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-export default function Forms({withRemoveButton = false}) {
+export default function Forms({withRemoveButton = false, addForm, withAddButton = true, removeForm}) {
   const classes = useStyles();
 
 
@@ -136,8 +136,8 @@ export default function Forms({withRemoveButton = false}) {
         </Grid>
         <div className={classes.buttonsContainer}>
           <div className={classes.leftSideButtonsContainer}>
-          {withRemoveButton && <IconButton isMargined text="Remove Form" icon={<RemoveCircleOutline color="#eeeeff" />} />}
-          <IconButton text="Add Form" icon={<AddCircleOutline color="#eeeeff" />} />
+          {withRemoveButton && <IconButton onClick={removeForm} isMargined text="Remove Form" icon={<RemoveCircleOutline color="#eeeeff" />} />}
+          {withAddButton && <IconButton onClick={addForm} text="Add Form" icon={<AddCircleOutline color="#eeeeff" />} />}
           </div>
           <Button className={classes.button} text="Test connection" />
         </div>

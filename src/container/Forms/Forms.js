@@ -60,10 +60,19 @@ const useStyles = makeStyles((theme) => ({
 function Forms(props) {
   const classes = useStyles();
 
+  const [forms, setForms] = React.useState([0]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const addForm = (index) => setForms([...forms, index]);
+
+  const removeForm = () => {
+    const arrayOfForms = [...forms];
+    arrayOfForms.pop();
+    setForms(arrayOfForms); 
+  }
 
   return (
     <div className={classes.root}>
@@ -81,8 +90,9 @@ function Forms(props) {
         <FormsContextProvider>
           <Paper className={classes.paper}>
             <span className={classes.heading}>HEADING</span>
-            <Form />
-            <Form withRemoveButton />
+            {/* <Form />
+            <Form withRemoveButton /> */}
+            {forms.map((f) => <Form removeForm={removeForm} withAddButton={f === (forms.length - 1)} addForm={() => addForm(f + 1)} withRemoveButton={Boolean(f)} />)}
             <FileForm />
             <Button className={classes.connectButton} text="Connect" />
           </Paper>
