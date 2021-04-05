@@ -26,11 +26,17 @@ const ValueContainer = styled.div`
   }
 `;
 
-const UploadedItem = ({isLast}) => {
+const IconButton = styled.div`
+  cursor: pointer;
+`;
+
+const UploadedItem = ({isLast, onDelete}) => {
   return (
     <Container isLast={isLast}>
       <ValueContainer>
-        <DeleteIcon color="#9A9A9A" />
+        <IconButton onClick={onDelete}>
+          <DeleteIcon color="#9A9A9A" />
+        </IconButton>
         <Text>January PCN Report</Text>
       </ValueContainer>
     </Container>

@@ -1,15 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import { FormsContextProvider } from './FormsContext';
+import { AccordionContextProvider } from './AccordionContext';
 import { Container } from '@material-ui/core';
 import Topbar from '../../components/Topbar';
 import Sidebar from '../../components/Sidebar';
-import Form from '../../components/Form';
+import AccordionForm from '../../components/AccordionForm';
 import FileForm from '../../components/FileForm';
 import Button from '../../components/Button';
 
@@ -57,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Forms(props) {
+function Accordions(props) {
   const classes = useStyles();
 
   const [forms, setForms] = React.useState([0]);
@@ -66,14 +64,27 @@ function Forms(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const addForm = (index) => setForms([...forms, index]);
+  const [expanded, setExpanded] = React.useState(0);
+
+  const addForm = (index) => {
+    setForms([...forms, index]);
+    setExpanded(expanded + 1);
+  };
 
   const removeForm = () => {
     const arrayOfForms = [...forms];
     arrayOfForms.pop();
     setForms(arrayOfForms); 
+    setExpanded(expanded - 1);
   }
 
+  const onExpand = (index) => {
+    if (index === expanded) {
+      setExpanded(undefined);
+    } else {
+      setExpanded(index);
+    }
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -87,20 +98,28 @@ function Forms(props) {
       />
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
-        <FormsContextProvider>
+        <AccordionContextProvider>
           <Paper className={classes.paper}>
             <span className={classes.heading}>HEADING</span>
-            {/* <Form />
-            <Form withRemoveButton /> */}
-            {forms.map((f) => <Form removeForm={removeForm} withAddButton={f === (forms.length - 1)} addForm={() => addForm(f + 1)} withRemoveButton={Boolean(f)} />)}
+            {forms.map((f) => (
+              <AccordionForm
+                form={f}
+                expanded={expanded}
+                onExpand={() => onExpand(f)}
+                removeForm={removeForm}
+                withAddButton={f === (forms.length - 1)}
+                addForm={() => addForm(f + 1)}
+                withRemoveButton={Boolean(f) && forms.length - 1 === f}
+              />
+            ))}
             <FileForm />
             <Button className={classes.connectButton} text="Connect" />
           </Paper>
-        </FormsContextProvider>
+        </AccordionContextProvider>
         </Container>
       </main>
     </div>
   );
 }
 
-export default Forms;
+export default Accordions;

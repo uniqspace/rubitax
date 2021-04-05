@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 
 const DataContext = createContext();
 
-export const FormsContextProvider = ({children}) => {
+export const AccordionContextProvider = ({children}) => {
   const [data, setData] = useState({
     address: '',
     email: '',
@@ -29,4 +29,4 @@ export const FormsContextProvider = ({children}) => {
   );
 };
 
-export const useFormsContext = () => useContext(DataContext);
+export const useAccordionContext = () => useContext(DataContext);

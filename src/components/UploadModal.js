@@ -89,15 +89,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UploadModal({control, register, setValue, trigger, open, setOpen}) {
   const classes = useStyles();
+  const [items, setItems] = React.useState(5);
   // const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const onDelete = () => {
+    setItems(items - 1);
+  }
 
   return (
     <div>
@@ -132,12 +133,7 @@ export default function UploadModal({control, register, setValue, trigger, open,
               withoutThumbs={true}
             />
             <div className={classes.itemsContainer}>
-              <UploadedItem />
-              <UploadedItem />
-              <UploadedItem />
-              <UploadedItem />
-
-              <UploadedItem isLast />
+              {[...Array(items).keys()].map(i => <UploadedItem onDelete={onDelete} isLast={(items - 1) === i} />)}
             </div>
             <div className={classes.buttonsContainer}>
               <Button className={classes.sbmtButton} text="Submit" />

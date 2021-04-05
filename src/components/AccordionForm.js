@@ -72,22 +72,23 @@ const schema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-export default function Forms({withRemoveButton = false, addForm, withAddButton = true, removeForm}) {
+export default function AccordionForm({withRemoveButton = false, addForm, withAddButton = true, removeForm, form, expanded, onExpand}) {
   const classes = useStyles();
-
 
   const { control, register, trigger, errors } = useForm({
     resolver: yupResolver(schema)
   });
+  console.log('form', expanded, form);
   return (
     <div className={classes.root}>
-      <Accordion defaultExpanded>
+      <Accordion expanded={expanded === form}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          onClick={onExpand}
         >
-          <Typography className={classes.heading}>SUBHEADING 1A</Typography>
+          <Typography className={classes.heading}>SUBHEADING {form}A</Typography>
         </AccordionSummary>
         <AccordionDetails>
         <Grid container spacing={4}>
