@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '38px',
     '& .MuiAccordionSummary-root': {
       border: '1px solid #EDEDED',
-      // backgroundColor: '#EDEDED',
+      backgroundColor: '#FFEFF7',
       height: 57,
       padding: '0 50px',
       minHeight: '57px',

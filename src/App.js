@@ -18,6 +18,7 @@ import './assets/font/Lato/lato.css';
 import './assets/css/style.css';
 import Login from './container/Auth/Login';
 import Forgot from './container/Auth/Forgot';
+import Table from './container/Table/Table';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +68,7 @@ export default function App() {
           <Router>
             <Switch>
               <Redirect exact from="/" to={{pathname: '/onboarding'}} />
+              <Route exact path="/table" component={Table} />
               <Route exact path="/onboarding" component={Onboarding} />
               <Route exact path="/accordion" component={Accordion} />
               <Route exact path="/login" component={Login} />

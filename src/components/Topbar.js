@@ -16,6 +16,7 @@ import SearchBox from './SearchBox';
 import avatar from '../assets/images/avatar.png';
 
 const drawerWidth = 256;
+const drawerWidthMin = 87;
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -23,6 +24,20 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
+    },
+    height: 88,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    background: '#FFFFFF',
+    boxShadow: 'none'
+  },
+  appBarMin: {
+    zIndex: theme.zIndex.drawer + 1,
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: `calc(100% - ${drawerWidthMin}px)`,
     },
     height: 88,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -68,10 +83,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Topbar(props) {
-  const { handleDrawerToggle } = props;
+  const { handleDrawerToggle, minimized } = props;
   const classes = useStyles();
   return (
-    <AppBar position="absolute" className={classes.appBar}>
+    <AppBar position="absolute" className={minimized ? classes.appBarMin : classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <IconButton
           color="inherit"

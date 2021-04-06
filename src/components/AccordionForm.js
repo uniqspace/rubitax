@@ -1,6 +1,5 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     '& .MuiAccordionSummary-root': {
       border: '1px solid #EDEDED',
-      // backgroundColor: '#EDEDED',
+      backgroundColor: '#FFEFF7',
       height: 57,
       padding: '0 50px',
       minHeight: '57px',
@@ -78,7 +77,7 @@ export default function AccordionForm({withRemoveButton = false, addForm, withAd
   const { control, register, trigger, errors } = useForm({
     resolver: yupResolver(schema)
   });
-  console.log('form', expanded, form);
+
   return (
     <div className={classes.root}>
       <Accordion expanded={expanded === form}>

@@ -14,18 +14,28 @@ import PieChartIcon from '@material-ui/icons/PieChart';
 import DirectionsBusIcon from '@material-ui/icons/DirectionsBus';
 import HelpIcon from '@material-ui/icons/Help';
 import PersonIcon from '@material-ui/icons/Person';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import SearchBox from './SearchBox';
 
 import logo from '../assets/images/logo.svg';
+import logoMin from '../assets/images/logoMin.svg';
 
 const drawerWidth = 256;
+const drawerWidthMin = 87;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
     background: '#FFFFFF',
     [theme.breakpoints.up('md')]: {
       width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  drawerMin: {
+    background: '#FFFFFF',
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidthMin,
       flexShrink: 0,
     },
   },
@@ -37,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    border: 0
+  },
+  drawerPaperMin: {
+    position: 'relative',
+    whiteSpace: 'nowrap',
+    width: drawerWidthMin,
     border: 0
   },
   logo: {
@@ -72,6 +88,25 @@ const useStyles = makeStyles((theme) => ({
       }
     }
   },
+  listItemMin: {
+    padding: '14px 36.5px',
+    '& .MuiListItemIcon-root': {
+      paddingRight: 13,
+      minWidth: 'initial',
+      '& > svg': {
+        width: 16,
+        height: 16
+      }
+    },
+    '& .MuiListItemText-root': {
+      marginTop: 0,
+      marginBottom: 0,
+      '& .MuiTypography-root': {
+        fontSize: 14,
+        lineHeight: '20px'
+      }
+    }
+  },
   divider: {
     marginTop: 19,
     marginBottom: 8,
@@ -79,17 +114,50 @@ const useStyles = makeStyles((theme) => ({
   image: {
     width: 130,
     height: 42,
+  },
+  imageMin: {
+    width: 37,
+    height: 42,
+  },
+  showButton: {
+    width: '41px',
+    height: '41px',
+    borderRadius: '22px',
+    background: 'rgba(196, 196, 196, 0.2)',
+    marginLeft: '55px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    transform: 'rotate(180deg)',
+    '& svg': {
+      color: '#A3A3A3',
+    }
+  },
+  showButtonMin: {
+    width: '41px',
+    height: '41px',
+    borderRadius: '22px',
+    background: 'rgba(196, 196, 196, 0.2)',
+    marginLeft: '23px',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    '& svg': {
+      color: '#A3A3A3',
+    }
   }
 }));
 
 function Sidebar(props) {
-  const { window, mobileOpen, handleDrawerToggle } = props;
+  const { window, mobileOpen, handleDrawerToggle, setMinimized, minimized } = props;
+
+  // const [minimized, setMinimized] = React.useState(false);
 
   const classes = useStyles();
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <nav className={classes.drawer} aria-label="mailbox folders">
+    <nav className={minimized ? classes.drawerMin : classes.drawer} aria-label="mailbox folders">
       <Hidden xsUp implementation="css">
         <Drawer
           container={container}
@@ -98,7 +166,7 @@ function Sidebar(props) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           classes={{
-            paper: classes.drawerPaper,
+            paper: minimized ? classes.drawerPaperMin : classes.drawerPaper,
           }}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
@@ -109,11 +177,11 @@ function Sidebar(props) {
           </div>
           <SearchBox className={classes.searchBox} />
           <List className={classes.list}>
-            <MainListItems />
+            <MainListItems withoutMinimize={true} minimized={minimized} setMinimized={setMinimized} />
           </List>
           <Divider className={classes.divider} />
           <List className={classes.list}>
-            <SecondaryListItems />
+            <SecondaryListItems minimized={minimized} />
           </List>
         </Drawer>
       </Hidden>
@@ -121,19 +189,19 @@ function Sidebar(props) {
         <Drawer
           variant="permanent"
           classes={{
-            paper: clsx(classes.drawerPaper),
+            paper: clsx(minimized ? classes.drawerPaperMin : classes.drawerPaper),
           }}
           open={true}
         >
           <div className={classes.logo}>
-            <img className={classes.image} src={logo} alt="Logo" />
+            <img className={minimized ? classes.imageMin : classes.image} src={minimized ? logoMin : logo} alt="Logo" />
           </div>
           <List className={classes.list}>
-            <MainListItems />
+            <MainListItems minimized={minimized} setMinimized={setMinimized} />
           </List>
           <Divider className={classes.divider}  />
           <List className={classes.list}>
-            <SecondaryListItems />
+            <SecondaryListItems minimized={minimized} />
           </List>
         </Drawer>
       </Hidden>
@@ -143,48 +211,54 @@ function Sidebar(props) {
 
 export default Sidebar;
 
-function MainListItems() {
+function MainListItems({setMinimized, minimized, withoutMinimize}) {
+
   const classes = useStyles();
   return (
     <div>
-      <ListSubheader className={classes.listSubheader}>DASHBOARD</ListSubheader>
-      <ListItem button className={classes.listItem}>
+      <div style={{display: 'flex'}}>
+        {!minimized && <ListSubheader className={classes.listSubheader}>DASHBOARD</ListSubheader>}
+        {!withoutMinimize ? <div onClick={() => setMinimized(!minimized)} className={minimized ? classes.showButtonMin : classes.showButton}>
+          <ChevronRightIcon color="#A3A3A3" />
+        </div> : null}
+      </div>
+      <ListItem button className={minimized ? classes.listItemMin : classes.listItem}>
         <ListItemIcon>
           <PieChartIcon />
         </ListItemIcon>
-        <ListItemText primary="Item 1" />
+        {!minimized && <ListItemText primary="Item 1" />}
       </ListItem>
-      <ListItem button className={classes.listItem}>
+      <ListItem button className={minimized ? classes.listItemMin : classes.listItem}>
         <ListItemIcon>
           <DirectionsBusIcon />
         </ListItemIcon>
-        <ListItemText primary="Item 2" />
+        {!minimized && <ListItemText primary="Item 2" />}
       </ListItem>
-      <ListItem button className={classes.listItem}>
+      <ListItem button className={minimized ? classes.listItemMin : classes.listItem}>
         <ListItemIcon>
           <DirectionsBusIcon />
         </ListItemIcon>
-        <ListItemText primary="Item 3" />
+        {!minimized && <ListItemText primary="Item 3" />}
       </ListItem>
-      <ListItem button className={classes.listItem}>
+      <ListItem button className={minimized ? classes.listItemMin : classes.listItem}>
         <ListItemIcon>
           <PersonIcon />
         </ListItemIcon>
-        <ListItemText primary="Item 4" />
+        {!minimized && <ListItemText primary="Item 4" />}
       </ListItem>
     </div>
   );
 }
 
-function SecondaryListItems() {
+function SecondaryListItems({ minimized }) {
   const classes = useStyles();
   return (
     <div>
-      <ListItem button className={classes.listItem}>
+      <ListItem button className={minimized ? classes.listItemMin : classes.listItem}>
         <ListItemIcon>
           <HelpIcon />
         </ListItemIcon>
-        <ListItemText primary="Help" />
+        {!minimized && <ListItemText primary="Help" />}
       </ListItem>
     </div>
   );

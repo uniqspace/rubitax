@@ -1,6 +1,7 @@
 import React from 'react';
 import BackupIcon from '@material-ui/icons/Backup';
 import styled from 'styled-components';
+import { useDropzone } from 'react-dropzone'
 
 const Input = styled.div`
   width: 100%;
@@ -47,10 +48,33 @@ export const Value = styled.p`
 `;
 export default function UploadFileInput({id}) {
   const [file, setFile] = React.useState(null)
+
+  // const onDrop = React.useCallback(acceptedFiles => {
+  //   let _files = files.slice(0);
+  //   const _acceptedFiles = acceptedFiles.map(file => Object.assign(file, {
+  //     preview: URL.createObjectURL(file)
+  //   }));
+  //   _files = _files.concat(_acceptedFiles)
+  //   setFiles(_files);
+  //   setValue(`${name}`, _files);
+  //     onChange();
+  // }, [files, setValue, name, onChange]);
+
+  const onDrop = (file) => {
+    console.log('drop', file);
+    setFile(`/${file[0].path}`);
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: onDrop,
+    multiple: true,
+    maxFiles: 10
+  });
+
   return (
-    <Input>
+    <Input {...getRootProps()}>
     {!file ? <Label>{'upload file'}</Label> : <Value>{file}</Value>}
-      <input onChange={(e) => setFile(e.nativeEvent.target.value)} type="file" id={id} name={id} style={{visibility: 'hidden'}} />
+      <input {...getInputProps()} onChange={(e) => setFile(e.nativeEvent.target.value)} type="file" id={id} name={id} style={{visibility: 'hidden'}} />
       <RightButton for={id}>
         <BackupIcon color="white" />
       </RightButton>

@@ -71,6 +71,7 @@ function Onboarding(props) {
   const classes = useStyles();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [minimized, setMinimized] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -95,10 +96,13 @@ function Onboarding(props) {
       <Topbar
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
+        minimized={minimized}
       />
       <Sidebar
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
+        minimized={minimized}
+        setMinimized={setMinimized}
       />
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>

@@ -60,6 +60,8 @@ function Accordions(props) {
 
   const [forms, setForms] = React.useState([0]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [minimized, setMinimized] = React.useState(false);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -91,10 +93,13 @@ function Accordions(props) {
       <Topbar
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
+        minimized={minimized}
       />
       <Sidebar
         mobileOpen={mobileOpen}
         handleDrawerToggle={handleDrawerToggle}
+        minimized={minimized}
+        setMinimized={setMinimized}
       />
       <main className={classes.content}>
         <Container maxWidth="lg" className={classes.container}>
