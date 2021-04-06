@@ -129,6 +129,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     transform: 'rotate(180deg)',
+    cursor: 'pointer',
     '& svg': {
       color: '#A3A3A3',
     }
@@ -142,6 +143,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
+    cursor: 'pointer',
     '& svg': {
       color: '#A3A3A3',
     }
