@@ -4,7 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import Paper from '@material-ui/core/Paper';
 import CssBaseline from '@material-ui/core/CssBaseline';
-
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { Container } from '@material-ui/core';
 import Topbar from '../../components/Topbar';
 import Sidebar from '../../components/Sidebar';
@@ -76,8 +77,13 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateRows: '54px repeat(9, 68px)',
   },
   row: {
-    background: 'white',
+    backgroundColor: 'white',
     border: '1px solid #EDEDED',
+    display: 'flex',
+    height: '68px',
+    zIndex: 1111,
+    cursor: 'pointer',
+    alignItems: 'center',
   },
   rowWithDropdown: {
     padding: '6.5px 14.75px 8.33px 15.75px',
@@ -123,6 +129,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     paddingTop: '3px',
     lineHeight: '20px',
+  },
+  treeItem: {
+    cursor: 'pointer',
   }
 }));
 
@@ -131,38 +140,127 @@ const schema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
- const getListStyle = isDraggingOver => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-});
-
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: 'none',
-
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'grey',
-
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
-
 function Table(props) {
   const classes = useStyles();
 
   const [selectedTab, setSelectedTab] = React.useState(0);
-
+  const [draggable, setDraggable] = React.useState([
+    {
+      name: 'Account 1',
+      id: 1,
+    },
+    {
+      name: 'Account 2',
+      id: 2,
+    },
+  ])
+  const [treeItems, setTreeItems] = React.useState([
+    {
+      name: 'Group 0',
+      id: 0,
+      visible: true,
+      subgroups: []
+    },
+    {
+      name: 'Group 2',
+      id: 1,
+      visible: true,
+      subgroups: [
+        {
+          name: 'Subgroup 0',
+          visible: true,
+          subgroup2: [],
+          id: 0,
+        },
+        {
+          name: 'Subgroup 1',
+          visible: true,
+          id: 1,
+          subgroup2: [
+            {
+              name: 'Subgroup 1a',
+              visible: true,
+              items: [],
+              id: 0,
+            },
+            {
+              name: 'Subgroup 1b',
+              visible: true,
+              items: [],
+              id: 1,
+            }
+          ]
+        },
+      ]
+    },
+  ])
   const { control, register, trigger, errors } = useForm({
     resolver: yupResolver(schema)
   });
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [minimized, setMinimized] = React.useState(false);
+  const [visible, setVisible] = React.useState(true);
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const toggleShowGroup = (index) => {
+    treeItems[index].visible = !treeItems[index].visible;
+    setTreeItems([...treeItems]);
+  };
+
+  const toggleShowSubGroup = (index, subIndex) => {
+    treeItems[index].subgroups[subIndex].visible = !treeItems[index].subgroups[subIndex].visible;
+    setTreeItems([...treeItems]);
+  };
+
+  const toggleShowSubGroup2 = (index, subIndex, sub2Index) => {
+    treeItems[index].subgroups[subIndex].subgroup2[sub2Index].visible = !treeItems[index].subgroups[subIndex].subgroup2[sub2Index].visible;
+    setTreeItems([...treeItems]);
+  };
+
+  const moveItem = (from, to, array) =>  {
+    array.splice(to, 0, array.splice(from, 1)[0]);
+    return array;
+  };
+
+  const onDragEnd = (result) => {
+    const { destination, draggableId, source } = result;
+    if (!destination) {
+      return;
+    }
+    if (source.droppableId === 'droppable') {
+      const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
+
+      treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items = [
+        ...treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items,
+        {
+          name: `Account ${source.index}`,
+          id: source.index,
+        }
+      ];
+      setTreeItems([...treeItems]);
+      const [_, id] = draggableId.split('-');
+      console.log('id', id);
+      const filtered = draggable.filter(el => el.id !== +id);
+      console.log(filtered);
+      setDraggable([...filtered]);
+    }
+    if (source.droppableId.includes('droppableGroup')) {
+      const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
+      const a = moveItem(source.index, destination.index, treeItems[itemId].subgroups[subgroupId].subgroup2);
+      treeItems[itemId].subgroups[subgroupId].subgroup2 = [...a];
+      setTreeItems([
+        ...treeItems
+      ]);
+    }
+    // setDraggable(draggable.splice(source.index, 1));
+  };
+
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
         <CssBaseline />
         <Topbar
@@ -182,9 +280,7 @@ function Table(props) {
               <span className={classes.heading}>HEADING</span>
               <div className={classes.tableContainer}>
                 <div className={classes.leftsidePart}>
-                <Droppable droppableId="droppable">
-                {(provided, snapshot) => (
-                  <div {...provided.droppableProps} ref={provided.innerRef} className={classes.column}>
+                  <div className={classes.column}>
                     <div className={classes.headerTab}>
                       {
                         [...Array(3).keys()].map(k => (
@@ -194,39 +290,78 @@ function Table(props) {
                         ))
                       }
                     </div>
-                  
-                    {
-                       [...Array(9).keys()].map(k => (
-                        <div style={{display: 'flex', paddingLeft: '17px', alignItems: 'center'}} className={classes.row}>
-                          <Draggable index={k} draggableId={k.toString()}>
-                            {(provided, snapshot) => (
-                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>Account {k}</div>
-                            )}
-                          </Draggable>
+
+                    <Droppable isDropDisabled droppableId="droppable">
+                      {(provide, snapshot) => (
+                        <div  {...provide.droppableProps} ref={provide.innerRef}>
+                        {
+                            draggable.map(k => (                             
+                            <div className={classes.row} style={{paddingLeft: 17}}>
+                              <Draggable index={k.id} draggableId={`account-${k.id}`}>
+                                {(provided, snapshot) => (
+                                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{k.name}</div>
+                                )}
+                              </Draggable>
+                            </div>
+                            ))
+                        }
                         </div>
-                       ))
-                    }
+                      )}
+                    </Droppable>
                   </div>
-                )}
-                </Droppable>
-                  <Droppable droppableId="droppable">
-                  {(provided, snapshot) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef} className={classes.column}>
+                    <div>
                       <div style={{borderRadius: '4px 0 0 0'}} className={classes.headerItem}>
                         <span className={classes.headerTitle}>List</span>
                       </div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                      <div className={classes.row}></div>
-                    </div>
-                  )}
+                      <div onClick={() => setVisible(!visible)} className={classes.row}>
+                        {visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+                        <div className={classes.treeItem}>Group 1st level</div>
+                      </div>
+                      {visible && treeItems.map((group, index) => (
+                        <>
+                        <div onClick={() => toggleShowGroup(index)} style={{paddingLeft: 15}} className={classes.row}>
+                          <div style={{transform: !group.visible ? 'rotate(270deg)' : 'rotate(0deg)', height: 24, width: 24}}>
+                            <ArrowDropDownIcon />
+                          </div>
+                          <div className={classes.treeItem}>{group.name}</div>
+                        </div>
+                        {group.visible && group.subgroups.map((subgroup, subGroupIndex) =>
+                        <>
+                          <div onClick={() => toggleShowSubGroup(index, subGroupIndex)} style={{paddingLeft: 30}} className={classes.row}>
+                            {subgroup.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+                          <div className={classes.treeItem}>{subgroup.name}</div>
+                          </div>
 
-                  </Droppable>
+                                {subgroup.visible && subgroup.subgroup2.map((subgroup2, key) =>
+                                  <Droppable droppableId={`droppableGroup-${group.id}-${subgroup.id}-${subgroup2.id}`}>
+                                    {(provided, snapshot) => (
+                                      <div style={{border: snapshot.isDraggingOver ?  '2px solid #F480B7' : 0}} {...provided.droppableProps} ref={provided.innerRef}>
+                                        <Draggable index={key} draggableId={key.toString()}>
+                                            {(provided, snapshot) => (
+                                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                <div onClick={() => toggleShowSubGroup2(index, subGroupIndex, key)} style={{paddingLeft: 45}} className={classes.row}>
+                                                  
+                                                    {subgroup2.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+                                                  
+                                                  <div className={classes.treeItem}>{subgroup2.name}</div>
+                                                </div>
+                                                  {subgroup2.visible && subgroup2.items.map(item => (
+                                                    <div style={{paddingLeft: '50px'}} className={classes.row}>
+                                                      <div className={classes.accountItem}>{item.name}</div>
+                                                    </div>
+                                                  ))}
+                                              </div>
+                                            )}
+                                        </Draggable>
+                                      </div>
+                                    )}
+                                  </Droppable>
+                                )}
+                        </>
+                        )}
+                        </>
+                      ))}
+                    </div>
                   <div className={classes.column}>
                     <div className={classes.headerItem}>
                       <span className={classes.headerTitle}>Amounts (ILS)</span>
