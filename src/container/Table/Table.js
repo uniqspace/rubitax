@@ -103,7 +103,9 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   headerItem: {
-    background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)',
+    // background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)',
+    background: 'transparent',
+    zIndex: 111,
     borderRight: '1px solid #FFDEEE',
     padding: '18.42px 0 16.59px 18.82px',
   },
@@ -130,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
   },
   treeItem: {
     cursor: 'pointer',
-  }
+  },
 }));
 
 const schema = yup.object().shape({
@@ -422,7 +424,7 @@ function Table(props) {
                 onChange={() => trigger("fieldFirst")}
               />
               </div>
-              <div className={classes.tableContainer}>
+              <div style={{position: 'relative'}} className={classes.tableContainer}>
                 <div className={classes.leftsidePart}>
                   <div className={classes.column}>
                     <div className={classes.headerTab}>
@@ -453,7 +455,7 @@ function Table(props) {
                       )}
                     </Droppable>
                   </div>
-                    <div>
+                    <div style={{zIndex: 1111}}>
                       <div style={{borderRadius: '4px 0 0 0'}} className={classes.headerItem}>
                         <span className={classes.headerTitle}>List</span>
                       </div>
@@ -634,6 +636,7 @@ function Table(props) {
                   }
                 </div>
                 </div>
+                <div style={{position: 'absolute', top: 0, height: 54.98, left: 210, right:0, background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)', zIndex: 1}}></div>
               </div>
               <Button className={classes.connectButton} text="Connect" />
             </Paper>
