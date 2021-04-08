@@ -54,21 +54,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '22.57px',
   },
   tableContainer: {
-    // height: '613px',
     width: '100%',
     display: 'flex',
     marginBottom: '47px',
   },
   leftsidePart: {
-    flex: 3,
+    // flex: 3,
     height: '613px',
     display: 'grid',
     gridTemplateColumns: '210px 177px 156px 155px',
   },
   rightsidePart: {
-    // display: 'flex',
     display: 'grid',
-    gridTemplateColumns: 'repeat(4, 200px)',
+    gridTemplateColumns: 'repeat(6, 200px)',
     flex: 2,
     overflow: 'auto',
   },
@@ -148,44 +146,86 @@ function Table(props) {
     {
       name: 'Account 1',
       id: 1,
+      tabId: 0,
     },
     {
       name: 'Account 2',
       id: 2,
+      tabId: 0,
+    },
+    {
+      name: 'Account 3',
+      id: 3,
+      tabId: 0,
+    },
+    {
+      name: 'Account 4',
+      id: 4,
+      tabId: 1,
+    },
+    {
+      name: 'Account 5',
+      id: 5,
+      tabId: 1,
+    },
+    {
+      name: 'Account 6',
+      id: 6,
+      tabId: 1,
+    },
+    {
+      name: 'Account 7',
+      id: 7,
+      tabId: 2,
+    },
+    {
+      name: 'Account 8',
+      id: 8,
+      tabId: 2,
+    },
+    {
+      name: 'Account 9',
+      id: 9,
+      tabId: 2,
+    },
+    {
+      name: 'Account 10',
+      id: 10,
+      tabId: 2,
     },
   ])
   const [treeItems, setTreeItems] = React.useState([
     {
       name: 'Group 0',
       id: 0,
-      visible: true,
+      visible: false,
       subgroups: []
     },
     {
       name: 'Group 2',
       id: 1,
-      visible: true,
+      visible: false,
       subgroups: [
         {
           name: 'Subgroup 0',
-          visible: true,
+          visible: false,
           subgroup2: [],
           id: 0,
         },
         {
           name: 'Subgroup 1',
-          visible: true,
+          visible: false,
           id: 1,
           subgroup2: [
             {
               name: 'Subgroup 1a',
-              visible: true,
+              visible: false,
               items: [],
               id: 0,
             },
             {
               name: 'Subgroup 1b',
-              visible: true,
+              visible: false,
               items: [],
               id: 1,
             }
@@ -231,7 +271,46 @@ function Table(props) {
     if (!destination) {
       return;
     }
+
+    if (destination.droppableId === 'droppable') {
+      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      setDraggable([...draggable,
+      {
+        name: `Account ${draggableId.split('-')[1]}`,
+        id: parseInt(draggableId.split('-')[1]),
+        tabId: selectedTab,
+      }
+    ]);
+    treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+      ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
+    ]
+
+    setTreeItems([...treeItems]);
+    return;
+    }
+    if (draggableId.includes('account') && source.droppableId.includes('droppableGroup')) {
+
+      const [destname, destItemId, destSubgroupId, destSubgroup2Id] = destination.droppableId.split('-');
+      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items = [
+        ...treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items,
+        {
+          name: `Account ${draggableId.split('-')[1]}`,
+          id: parseInt(draggableId.split('-')[1]),
+          tabId: selectedTab,
+        }
+      ];
+      // const ind = treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.findIndex(i => i.id === +draggableId.split('-')[1])
+      treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+        ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
+      ]
+      console.log(treeItems);
+      setTreeItems([...treeItems]);
+      return;
+
+    } 
     if (source.droppableId === 'droppable') {
+      console.log('result', result);
       const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
 
       treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items = [
@@ -239,14 +318,15 @@ function Table(props) {
         {
           name: `Account ${source.index}`,
           id: source.index,
+          tabId: selectedTab,
         }
       ];
       setTreeItems([...treeItems]);
       const [_, id] = draggableId.split('-');
-      console.log('id', id);
       const filtered = draggable.filter(el => el.id !== +id);
       console.log(filtered);
       setDraggable([...filtered]);
+      return;
     }
     if (source.droppableId.includes('droppableGroup')) {
       const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
@@ -256,9 +336,63 @@ function Table(props) {
         ...treeItems
       ]);
     }
-    // setDraggable(draggable.splice(source.index, 1));
   };
 
+  
+  const renderRow = (component) => {
+    return (
+      <>
+        {component}
+        {
+          visible && [...Array(treeItems.length).keys()].map(k => component)
+        }
+        {
+          treeItems.map(item => {
+            if (item.visible) {
+              return (
+                <>
+                  {
+                    [...Array(item.subgroups.length).keys()].map(k1 => component)
+                  }
+                  {
+                    item.subgroups.map(sub => {
+                      if (sub.visible) {
+                        return (
+                          <>
+                            {
+                              [...Array(sub.subgroup2.length).keys()].map(k2 => component)
+                            }
+                            {
+                              sub.subgroup2.map(sub2 => {
+                                if (sub2.visible) {
+                                  return (
+                                    <>
+                                      {
+                                        [...Array(sub2.items.length).keys()].map(k3 => component)
+                                      }
+                                    </>
+                                  )
+                                }
+                                return null;
+                              })
+                            }
+                          </>
+                        )
+                      }
+                      return null
+                    })
+                  }
+                </>
+              )
+            }
+            return null;
+          })
+        }
+      </>
+    )
+  }
+
+  console.log('draggable', draggable);
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -275,9 +409,19 @@ function Table(props) {
           setMinimized={setMinimized}
         />
         <main className={classes.content}>
-          <Container maxWidth="lg" className={classes.container}>
+          <Container style={{maxWidth: 'none'}} maxWidth="lg" className={classes.container}>
             <Paper className={classes.paper}>
               <span className={classes.heading}>HEADING</span>
+              <div style={{width: 443, marginBottom: 21}}>
+              <Dropdown
+                name="dropdown1"
+                label="Dropdown 1"
+                control={control}
+                register={register}
+                error={errors.fieldFirst?.message}
+                onChange={() => trigger("fieldFirst")}
+              />
+              </div>
               <div className={classes.tableContainer}>
                 <div className={classes.leftsidePart}>
                   <div className={classes.column}>
@@ -291,11 +435,11 @@ function Table(props) {
                       }
                     </div>
 
-                    <Droppable isDropDisabled droppableId="droppable">
+                    <Droppable droppableId="droppable">
                       {(provide, snapshot) => (
                         <div  {...provide.droppableProps} ref={provide.innerRef}>
                         {
-                            draggable.map(k => (                             
+                            draggable.filter(d => d.tabId === selectedTab).map(k => (                             
                             <div className={classes.row} style={{paddingLeft: 17}}>
                               <Draggable index={k.id} draggableId={`account-${k.id}`}>
                                 {(provided, snapshot) => (
@@ -347,8 +491,14 @@ function Table(props) {
                                                 </div>
                                                   {subgroup2.visible && subgroup2.items.map(item => (
                                                     <div style={{paddingLeft: '50px'}} className={classes.row}>
-                                                      <div className={classes.accountItem}>{item.name}</div>
+                                                    <Draggable index={item.id} draggableId={`account-${item.id}`}>
+                                                      {(provided, snapshot) => (
+                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{item.name}</div>
+                                                      )}
+                                                    </Draggable>
                                                     </div>
+                                                    //   <div className={classes.accountItem}>{item.name}</div>
+                                                    
                                                   ))}
                                               </div>
                                             )}
@@ -366,25 +516,18 @@ function Table(props) {
                     <div className={classes.headerItem}>
                       <span className={classes.headerTitle}>Amounts (ILS)</span>
                     </div>
-                    {
-                      [...Array(9).keys()].map(k => (
-                        <div style={{ paddingLeft: '17px', display: 'flex', alignItems: 'center'}} className={classes.row}>
+                    {renderRow(<div style={{ paddingLeft: '17px', display: 'flex', alignItems: 'center'}} className={classes.row}>
                           <span className={classes.amount}>₪123</span>
                         </div>
-                      ))
-                    }
+                    )}
                   </div>
                   <div className={classes.column}>
                     <div className={classes.headerItem}>
                       <span className={classes.headerTitle}>Amounts (USD)</span>
                     </div>
-                    {
-                      [...Array(9).keys()].map(k => (
-                        <div style={{ paddingLeft: '17px', display: 'flex', alignItems: 'center'}} className={classes.row}>
-                          <span className={classes.amount}>$123</span>
-                        </div>
-                      ))
-                    }
+                    {renderRow(<div style={{ paddingLeft: '17px', display: 'flex', alignItems: 'center'}} className={classes.row}>
+                      <span className={classes.amount}>$123</span>
+                    </div>)}
                   </div>
                 </div>
                 <div className={classes.rightsidePart}>
@@ -392,8 +535,8 @@ function Table(props) {
                   <div className={classes.headerItem}>
                     <span className={classes.headerTitle}>1</span>
                   </div>
-                  {[...Array(9).keys()].map(k => (
-                    <div className={classes.rowWithDropdown}>
+                  {
+                    renderRow(<div className={classes.rowWithDropdown}>
                       <Dropdown
                         name="dropdown1"
                         label="Dropdown 1"
@@ -402,15 +545,15 @@ function Table(props) {
                         error={errors.fieldFirst?.message}
                         onChange={() => trigger("fieldFirst")}
                       />
-                    </div>
-                  ))}
+                    </div>)
+                  }
                 </div>
                 <div className={classes.column}>
                   <div className={classes.headerItem}>
                     <span className={classes.headerTitle}>2</span>
                   </div>
-                  {[...Array(9).keys()].map(k => (
-                    <div className={classes.rowWithDropdown}>
+                  {
+                    renderRow(<div className={classes.rowWithDropdown}>
                       <Dropdown
                         name="dropdown1"
                         label="Dropdown 1"
@@ -419,15 +562,15 @@ function Table(props) {
                         error={errors.fieldFirst?.message}
                         onChange={() => trigger("fieldFirst")}
                       />
-                    </div>
-                  ))}
+                    </div>)
+                  }
                 </div>
                 <div className={classes.column}>
                   <div className={classes.headerItem}>
                     <span className={classes.headerTitle}>3</span>
                   </div>
-                  {[...Array(9).keys()].map(k => (
-                    <div className={classes.rowWithDropdown}>
+                    {
+                    renderRow(<div className={classes.rowWithDropdown}>
                       <Dropdown
                         name="dropdown1"
                         label="Dropdown 1"
@@ -436,15 +579,15 @@ function Table(props) {
                         error={errors.fieldFirst?.message}
                         onChange={() => trigger("fieldFirst")}
                       />
-                    </div>
-                  ))}
+                    </div>)
+                  }
                 </div>
                 <div className={classes.column}>
                   <div style={{borderRadius: '0 4px 0 0'}} className={classes.headerItem}>
                     <span className={classes.headerTitle}>4</span>
                   </div>
-                  {[...Array(9).keys()].map(k => (
-                    <div className={classes.rowWithDropdown}>
+                    {
+                    renderRow(<div className={classes.rowWithDropdown}>
                       <Dropdown
                         name="dropdown1"
                         label="Dropdown 1"
@@ -453,8 +596,42 @@ function Table(props) {
                         error={errors.fieldFirst?.message}
                         onChange={() => trigger("fieldFirst")}
                       />
-                    </div>
-                  ))}
+                    </div>)
+                  }
+                </div>
+                <div className={classes.column}>
+                  <div className={classes.headerItem}>
+                    <span className={classes.headerTitle}>5</span>
+                  </div>
+                    {
+                    renderRow(<div className={classes.rowWithDropdown}>
+                      <Dropdown
+                        name="dropdown1"
+                        label="Dropdown 1"
+                        control={control}
+                        register={register}
+                        error={errors.fieldFirst?.message}
+                        onChange={() => trigger("fieldFirst")}
+                      />
+                    </div>)
+                  }
+                </div>
+                <div className={classes.column}>
+                  <div className={classes.headerItem}>
+                    <span className={classes.headerTitle}>6</span>
+                  </div>
+                    {
+                    renderRow(<div className={classes.rowWithDropdown}>
+                      <Dropdown
+                        name="dropdown1"
+                        label="Dropdown 1"
+                        control={control}
+                        register={register}
+                        error={errors.fieldFirst?.message}
+                        onChange={() => trigger("fieldFirst")}
+                      />
+                    </div>)
+                  }
                 </div>
                 </div>
               </div>
