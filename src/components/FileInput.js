@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
   thumbsContainer: {
     position: 'absolute',
-    top: 240,
+    top: 28.5,
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
@@ -43,26 +43,45 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 28,
   },
   thumb: {
-    padding: 9,
-    boxSizing: 'border-box'
-  },
-  thumbInner: {
+    width: 95,
+    height: 116.5,
     background: '#E7E7E7',
-    width: 50,
-    height: 58,
-    borderRadius: 3,
-    border: '1px solid #eaeaea',
+    borderRadius: '6px',
+    marginRight: 14,
+    position: 'relative',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  thumbInner: {
+    position: 'absolute',
+    top: 11,
+    left: 14,
     cursor: 'pointer',
     color: '#C4C4C4'
   },
+  fileNameContainer: {
+    display: 'flex',
+    flexWrap: 'nowrap'
+  },
   fileName: {
-    width: 50,
-    whiteSpace: 'nowrap',
+    width: 40,
+    height: 20,
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    textOverflow: 'ellipsis'
+  },
+  fileFormat: {
+    width: 40,
+    height: 20,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  fileSize: {
+    position: 'absolute',
+    bottom: 28,
+    left: 16,
+    fontSize: 12,
+    opacity: 0.5,
   },
 }));
 
@@ -100,20 +119,33 @@ function FileInput({
     onChange();
   }
 
-  const thumbs = files.map((file, idx) => (
-    <div key={`${file.name}_${idx}`} className={classes.thumb}>
-      <div
-        className={classes.thumbInner}
-        onClick={(e) => removeFile(e, idx)}
-      >
-        <CancelIcon size="small" />
+  const formatFileSize = (size) => {
+    if (size > (1000 * 1000)) {
+      return `${parseInt(size / (1000 * 1000))} mb`
+    }
+    if (size > 1000) {
+      return `${parseInt(size / 1000)} kb`
+    }
+    return `${size} b`
+  }
+
+  const thumbs = files.map((file, idx) => {
+    const format = file.name.split('.')[1];
+    return (
+      <div key={`${file.name}_${idx}`} className={classes.thumb}>
+        <div  onClick={(e) => removeFile(e, idx)} className={classes.thumbInner}>
+          <CancelIcon size="small" />
+        </div>
+        <span className={classes.fileNameContainer}>
+          <span className={classes.fileName}>{file.name}</span>
+          <span className={classes.fileFormat}>.{format}</span>
+        </span>
+        <div className={classes.fileSize}>
+          {formatFileSize(file.size)}
+        </div>
       </div>
-      <Typography
-        variant="body2"
-        className={classes.fileName}
-      >{file.name}</Typography>
-    </div>
-  ));
+    )
+  });
 
   return (
     <Controller

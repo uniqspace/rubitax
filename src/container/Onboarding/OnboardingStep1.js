@@ -70,7 +70,7 @@ const schema = yup.object().shape({
   idScreen: yup.array().typeError('This field is required').min(1, 'This field is required'),
 });
 
-function OnBoardingContext({
+function OnBoardingStep1({
   moveStepTwo
 }) {
   const classes = useStyles();
@@ -257,4 +257,4 @@ function OnBoardingContext({
   );
 }
 
-export default OnBoardingContext;
+export default OnBoardingStep1;

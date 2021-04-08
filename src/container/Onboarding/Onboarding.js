@@ -105,7 +105,7 @@ function Onboarding(props) {
         setMinimized={setMinimized}
       />
       <main className={classes.content}>
-        <Container maxWidth="lg" className={classes.container}>
+        <Container maxWidth="lg" style={{maxWidth: minimized ? 'none' : '1280px'}} className={classes.container}>
         <OnBoardingContextProvider>
           <Paper className={classes.paper}>
             <Tabs
