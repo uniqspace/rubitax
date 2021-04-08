@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     border: 0,
     boxShadow: '0px 12px 76px rgba(226, 48, 142, 0.1)',
     [theme.breakpoints.up('sm')]: {
-      padding: '27px 0 27px 45px',
+      padding: '27px 45px 27px 45px',
     },
   },
   heading: {
@@ -82,11 +82,21 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1111,
     cursor: 'pointer',
     alignItems: 'center',
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    '&:last-child': {
+      borderBottomWidth: 1,
+    }
   },
   rowWithDropdown: {
     padding: '6.5px 14.75px 8.33px 15.75px',
     background: 'white',
     border: '1px solid #EDEDED',
+    borderBottomWidth: 0,
+    borderLeftWidth: 0,
+    '&:last-child': {
+      borderBottomWidth: 1,
+    }
   },
   headerTab: {
     display: 'grid',
@@ -442,7 +452,7 @@ function Table(props) {
                         <div  {...provide.droppableProps} ref={provide.innerRef}>
                         {
                             draggable.filter(d => d.tabId === selectedTab).map(k => (                             
-                            <div className={classes.row} style={{paddingLeft: 17}}>
+                            <div className={classes.row} style={{paddingLeft: 17, borderLeftWidth: 1}}>
                               <Draggable index={k.id} draggableId={`account-${k.id}`}>
                                 {(provided, snapshot) => (
                                   <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{k.name}</div>
@@ -456,7 +466,7 @@ function Table(props) {
                     </Droppable>
                   </div>
                     <div style={{zIndex: 1111}}>
-                      <div style={{borderRadius: '4px 0 0 0'}} className={classes.headerItem}>
+                      <div style={{borderRadius: '4px 0 0 0', height: 54}} className={classes.headerItem}>
                         <span className={classes.headerTitle}>List</span>
                       </div>
                       <div onClick={() => setVisible(!visible)} className={classes.row}>
@@ -601,42 +611,8 @@ function Table(props) {
                     </div>)
                   }
                 </div>
-                <div className={classes.column}>
-                  <div className={classes.headerItem}>
-                    <span className={classes.headerTitle}>5</span>
-                  </div>
-                    {
-                    renderRow(<div className={classes.rowWithDropdown}>
-                      <Dropdown
-                        name="dropdown1"
-                        label="Dropdown 1"
-                        control={control}
-                        register={register}
-                        error={errors.fieldFirst?.message}
-                        onChange={() => trigger("fieldFirst")}
-                      />
-                    </div>)
-                  }
                 </div>
-                <div className={classes.column}>
-                  <div className={classes.headerItem}>
-                    <span className={classes.headerTitle}>6</span>
-                  </div>
-                    {
-                    renderRow(<div className={classes.rowWithDropdown}>
-                      <Dropdown
-                        name="dropdown1"
-                        label="Dropdown 1"
-                        control={control}
-                        register={register}
-                        error={errors.fieldFirst?.message}
-                        onChange={() => trigger("fieldFirst")}
-                      />
-                    </div>)
-                  }
-                </div>
-                </div>
-                <div style={{position: 'absolute', top: 0, height: 54.98, left: 210, right:0, background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)', zIndex: 1}}></div>
+                <div style={{position: 'absolute', top: 0, height: 54, left: 210, right:0, background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)', zIndex: 1}}></div>
               </div>
               <Button className={classes.connectButton} text="Connect" />
             </Paper>
