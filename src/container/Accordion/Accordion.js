@@ -102,7 +102,7 @@ function Accordions(props) {
         setMinimized={setMinimized}
       />
       <main className={classes.content}>
-        <Container style={{maxWidth: minimized ? 'none' : '1280px'}} maxWidth="lg" className={classes.container}>
+        <Container style={{maxWidth: minimized ? 'none' : 'none'}} maxWidth="lg" className={classes.container}>
         <AccordionContextProvider>
           <Paper className={classes.paper}>
             <span className={classes.heading}>HEADING</span>

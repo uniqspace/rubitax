@@ -50,13 +50,14 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 14,
     position: 'relative',
     display: 'flex',
-    justifyContent: 'center',
+    // justifyContent: 'center',
+    paddingLeft: '10px',
     alignItems: 'center',
   },
   thumbInner: {
     position: 'absolute',
     top: 11,
-    left: 14,
+    left: 10,
     cursor: 'pointer',
     color: '#C4C4C4'
   },
@@ -71,15 +72,15 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis'
   },
   fileFormat: {
-    width: 40,
-    height: 20,
+    // width: 40,
+    // height: 20,
     overflow: 'hidden',
     textOverflow: 'ellipsis'
   },
   fileSize: {
     position: 'absolute',
     bottom: 28,
-    left: 16,
+    left: 10,
     fontSize: 12,
     opacity: 0.5,
   },
@@ -165,8 +166,8 @@ function FileInput({
               isDragActive?
               <Typography variant="body2">Drop the files here ...</Typography>:
               <>
-                <BackupIcon style={{fontSize: 52, marginBottom: 20}} />
-                <Typography variant="body2">Drag and drop to upload file<br/>or browse</Typography>
+                <BackupIcon style={{fontSize: 52, marginBottom: 5, marginTop: 80}} />
+                <Typography variant="body2">Drag and drop to upload file or browse</Typography>
                 {!withoutThumbs ? <aside className={classes.thumbsContainer}>
                   {thumbs}
                 </aside> : null}

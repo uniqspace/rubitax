@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   listItemMin: {
-    padding: '14px 36.5px',
+    padding: '16px 36.5px',
     '& .MuiListItemIcon-root': {
       paddingRight: 13,
       minWidth: 'initial',
