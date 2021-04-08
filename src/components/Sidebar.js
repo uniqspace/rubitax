@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '20px'
   },
   listItem: {
-    padding: '14px 24px',
+    padding: '14px 36.5px',
     '& .MuiListItemIcon-root': {
       paddingRight: 13,
       minWidth: 'initial',
