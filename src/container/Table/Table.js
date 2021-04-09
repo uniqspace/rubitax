@@ -253,6 +253,7 @@ function Table(props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [minimized, setMinimized] = React.useState(false);
   const [visible, setVisible] = React.useState(true);
+  const [isReversed, setReversed] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -273,83 +274,166 @@ function Table(props) {
     setTreeItems([...treeItems]);
   };
 
-  const moveItem = (from, to, array) =>  {
-    array.splice(to, 0, array.splice(from, 1)[0]);
+  const reorder = (array) =>  {
+    let tmp = array[0];
+    array[0] = {
+      ...array[1],
+    };
+    array[1] = {
+      ...tmp,
+    }
     return array;
   };
 
+  // const moveItem = (from, to, array) =>  {
+  //   // const arr = ['1', '2'];
+    
+  //   let tmp = array[0];
+  //   array[0] = {
+  //     ...array[1],
+  //   };
+  //   array[1] = {
+  //     ...tmp,
+  //   }
+  //   // array.splice(to, 0, array.splice(from, 1)[0]);
+  //   return array;
+  // };
+
+  // const onDragEnd = (result) => {
+  //   const { destination, draggableId, source } = result;
+  //   if (!destination) {
+  //     return;
+  //   }
+
+  //   if (destination.droppableId === 'droppable') {
+  //     const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+  //     setDraggable([...draggable,
+  //     {
+  //       name: `Account ${draggableId.split('-')[1]}`,
+  //       id: parseInt(draggableId.split('-')[1]),
+  //       tabId: selectedTab,
+  //     }
+  //   ]);
+  //   treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+  //     ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
+  //   ]
+
+  //   setTreeItems([...treeItems]);
+  //   return;
+  //   }
+  //   if (draggableId.includes('account') && source.droppableId.includes('droppableGroup')) {
+
+  //     const [destname, destItemId, destSubgroupId, destSubgroup2Id] = destination.droppableId.split('-');
+  //     const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      // treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items = [
+      //   ...treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items,
+      //   {
+      //     name: `Account ${draggableId.split('-')[1]}`,
+      //     id: parseInt(draggableId.split('-')[1]),
+      //     tabId: selectedTab,
+      //   }
+      // ];
+      // // const ind = treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.findIndex(i => i.id === +draggableId.split('-')[1])
+      // treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+      //   ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
+      // ]
+  //     console.log(treeItems);
+  //     setTreeItems([...treeItems]);
+  //     return;
+
+  //   } 
+  //   if (source.droppableId === 'droppable') {
+  //     console.log('result', result);
+  //     const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
+
+      // treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items = [
+      //   ...treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items,
+      //   {
+      //     name: `Account ${source.index}`,
+      //     id: source.index,
+      //     tabId: selectedTab,
+      //   }
+      // ];
+      // setTreeItems([...treeItems]);
+  //     const [_, id] = draggableId.split('-');
+  //     const filtered = draggable.filter(el => el.id !== +id);
+  //     console.log(filtered);
+  //     setDraggable([...filtered]);
+  //     return;
+  //   }
+  //   if (source.droppableId.includes('droppableGroup')) {
+  //     const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
+  //     const a = moveItem(source.index, destination.index, treeItems[itemId].subgroups[subgroupId].subgroup2);
+  //     treeItems[itemId].subgroups[subgroupId].subgroup2 = [...a];
+  //     setTreeItems([
+  //       ...treeItems
+  //     ]);
+  //   }
+  // };
+
   const onDragEnd = (result) => {
     const { destination, draggableId, source } = result;
-    if (!destination) {
+    console.log(result);
+    if (source.droppableId.includes("Group") && destination.droppableId === 'droppable' && draggableId.includes('account')) {
+      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      const [draggableName, draggId] = draggableId.split('-');
+      treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+        ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== parseInt(draggId))
+      ]
+      draggable.push({
+        name: `Account ${draggId}`,
+        id: parseInt(draggId),
+        tabId: parseInt(selectedTab),
+      });
+      setDraggable(draggable);
       return;
     }
-
-    if (destination.droppableId === 'droppable') {
-      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
-      setDraggable([...draggable,
-      {
-        name: `Account ${draggableId.split('-')[1]}`,
-        id: parseInt(draggableId.split('-')[1]),
-        tabId: selectedTab,
-      }
-    ]);
-    treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
-      ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
-    ]
-
-    setTreeItems([...treeItems]);
-    return;
+    if (source.droppableId.includes("Group") && destination.droppableId.includes("Group") && !draggableId.includes('account')) {
+      const tmp = treeItems[1].subgroups[1].subgroup2[1];
+      treeItems[1].subgroups[1].subgroup2 = [
+        tmp,
+        treeItems[1].subgroups[1].subgroup2[0],
+      ]
+      console.log(treeItems[1].subgroups[1].subgroup2);
+      setTreeItems([...treeItems]);
+      return;
     }
-    if (draggableId.includes('account') && source.droppableId.includes('droppableGroup')) {
-
+    if (source.droppableId === "droppable" && destination.droppableId.includes("Group")) {
       const [destname, destItemId, destSubgroupId, destSubgroup2Id] = destination.droppableId.split('-');
-      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      const [draggableName, draggId] = draggableId.split('-');
       treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items = [
         ...treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items,
         {
-          name: `Account ${draggableId.split('-')[1]}`,
-          id: parseInt(draggableId.split('-')[1]),
-          tabId: selectedTab,
+          name: `Account ${draggId}`,
+          id: parseInt(draggId),
+          tabId: parseInt(selectedTab),
         }
       ];
-      // const ind = treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.findIndex(i => i.id === +draggableId.split('-')[1])
-      treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
-        ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
-      ]
-      console.log(treeItems);
-      setTreeItems([...treeItems]);
+      const filteredDraggable = draggable.filter(d => d.id !== parseInt(draggId));
+      console.log(filteredDraggable);
+      setTreeItems(treeItems);
+      setDraggable(filteredDraggable);
       return;
-
-    } 
-    if (source.droppableId === 'droppable') {
-      console.log('result', result);
-      const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
-
-      treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items = [
-        ...treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items,
+    }
+    if (draggableId.includes('account') && destination.droppableId.includes("Group") && source.droppableId.includes("Group")) {
+      const [destname, destItemId, destSubgroupId, destSubgroup2Id] = destination.droppableId.split('-');
+      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      const [draggableName, draggId] = draggableId.split('-');
+      treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items = [
+        ...treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items,
         {
-          name: `Account ${source.index}`,
-          id: source.index,
-          tabId: selectedTab,
+          name: `Account ${draggId}`,
+          id: parseInt(draggId),
+          tabId: parseInt(selectedTab),
         }
       ];
-      setTreeItems([...treeItems]);
-      const [_, id] = draggableId.split('-');
-      const filtered = draggable.filter(el => el.id !== +id);
-      console.log(filtered);
-      setDraggable([...filtered]);
+      treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
+        ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== parseInt(draggId))
+      ]
+      setTreeItems(treeItems);
       return;
     }
-    if (source.droppableId.includes('droppableGroup')) {
-      const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
-      const a = moveItem(source.index, destination.index, treeItems[itemId].subgroups[subgroupId].subgroup2);
-      treeItems[itemId].subgroups[subgroupId].subgroup2 = [...a];
-      setTreeItems([
-        ...treeItems
-      ]);
-    }
-  };
-
+  }
   
   const renderRow = (component) => {
     return (
@@ -413,7 +497,6 @@ function Table(props) {
     }
     return 0;
   }
-
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -510,16 +593,14 @@ function Table(props) {
                                                   
                                                   <div className={classes.treeItem}>{subgroup2.name}</div>
                                                 </div>
-                                                  {subgroup2.visible && subgroup2.items.map(item => (
+                                                  {subgroup2.visible && subgroup2.items.map((item, itemInd) => (
                                                     <div style={{paddingLeft: '50px', borderLeftWidth: 1}} className={classes.row}>
-                                                    <Draggable index={item.id} draggableId={`account-${item.id}`}>
+                                                    <Draggable index={itemInd} draggableId={`account-${item.id}`}>
                                                       {(provided, snapshot) => (
                                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{item.name}</div>
                                                       )}
                                                     </Draggable>
                                                     </div>
-                                                    //   <div className={classes.accountItem}>{item.name}</div>
-                                                    
                                                   ))}
                                               </div>
                                             )}
