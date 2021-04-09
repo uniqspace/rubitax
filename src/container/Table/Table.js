@@ -373,7 +373,9 @@ function Table(props) {
 
   const onDragEnd = (result) => {
     const { destination, draggableId, source } = result;
-    console.log(result);
+    if (!destination) {
+      return;
+    }
     if (source.droppableId.includes("Group") && destination.droppableId === 'droppable' && draggableId.includes('account')) {
       const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
       const [draggableName, draggId] = draggableId.split('-');
