@@ -54,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '22.57px',
   },
   tableContainer: {
-    width: '100%',
+    // width: '100%',
+    maxWidth: 1498,
     display: 'flex',
     marginBottom: '47px',
   },
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   rightsidePart: {
     display: 'grid',
     gridTemplateColumns: 'repeat(6, 200px)',
-    flex: 2,
+    // flex: 2,
     overflow: 'auto',
   },
   column: {
@@ -446,7 +447,7 @@ function Table(props) {
         }
         {
           treeItems.map(item => {
-            if (item.visible) {
+            if (item.visible && visible) {
               return (
                 <>
                   {
@@ -454,7 +455,7 @@ function Table(props) {
                   }
                   {
                     item.subgroups.map(sub => {
-                      if (sub.visible) {
+                      if (sub.visible && visible) {
                         return (
                           <>
                             {
@@ -462,7 +463,7 @@ function Table(props) {
                             }
                             {
                               sub.subgroup2.map(sub2 => {
-                                if (sub2.visible) {
+                                if (sub2.visible && visible) {
                                   return (
                                     <>
                                       {
@@ -491,6 +492,9 @@ function Table(props) {
   }
 
   const getBorderLeft = (index) => {
+    if (selectedTab === 3 && index === 0 && draggable.filter(d => d.tabId === selectedTab).length === 2) {
+      return 1;
+    }
     if ((index === 0 || index === 1) && draggable.filter(d => d.tabId === selectedTab).length === 1) {
       return 1;
     }
@@ -704,7 +708,7 @@ function Table(props) {
                   }
                 </div>
                 </div>
-                <div style={{position: 'absolute', top: 0, height: 54, left: 210, right:0, background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)', zIndex: 1}}></div>
+                <div style={{position: 'absolute', top: 0, height: 54, left: 210, right: 0, background: 'linear-gradient(90deg, #F480B7 0%, rgba(255, 255, 255, 0) 306.66%)', zIndex: 1}}></div>
               </div>
               <Button className={classes.connectButton} text="Connect" />
             </Paper>
