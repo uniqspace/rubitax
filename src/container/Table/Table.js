@@ -404,7 +404,16 @@ function Table(props) {
     )
   }
 
-  console.log('draggable', draggable);
+  const getBorderLeft = (index) => {
+    if ((index === 0 || index === 1) && draggable.filter(d => d.tabId === selectedTab).length === 1) {
+      return 1;
+    }
+    if (index === 1 && draggable.filter(d => d.tabId === selectedTab).length === 2) {
+      return 1;
+    }
+    return 0;
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -469,13 +478,13 @@ function Table(props) {
                       <div style={{borderRadius: '4px 0 0 0', height: 54}} className={classes.headerItem}>
                         <span className={classes.headerTitle}>List</span>
                       </div>
-                      <div onClick={() => setVisible(!visible)} className={classes.row}>
+                      <div onClick={() => setVisible(!visible)} style={{borderLeftWidth: draggable.filter(d => d.tabId === selectedTab).length === 0 ? 1 : 0}} className={classes.row}>
                         {visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
                         <div className={classes.treeItem}>Group 1st level</div>
                       </div>
                       {visible && treeItems.map((group, index) => (
                         <>
-                        <div onClick={() => toggleShowGroup(index)} style={{paddingLeft: 15}} className={classes.row}>
+                        <div onClick={() => toggleShowGroup(index)} style={{ paddingLeft: 15, borderLeftWidth: getBorderLeft(index) }} className={classes.row}>
                           <div style={{transform: !group.visible ? 'rotate(270deg)' : 'rotate(0deg)', height: 24, width: 24}}>
                             <ArrowDropDownIcon />
                           </div>
@@ -483,7 +492,7 @@ function Table(props) {
                         </div>
                         {group.visible && group.subgroups.map((subgroup, subGroupIndex) =>
                         <>
-                          <div onClick={() => toggleShowSubGroup(index, subGroupIndex)} style={{paddingLeft: 30}} className={classes.row}>
+                          <div onClick={() => toggleShowSubGroup(index, subGroupIndex)} style={{paddingLeft: 30, borderLeftWidth: selectedTab === 2 && subGroupIndex === 0 ? 0 : 1}} className={classes.row}>
                             {subgroup.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
                           <div className={classes.treeItem}>{subgroup.name}</div>
                           </div>
@@ -495,14 +504,14 @@ function Table(props) {
                                         <Draggable index={key} draggableId={key.toString()}>
                                             {(provided, snapshot) => (
                                               <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <div onClick={() => toggleShowSubGroup2(index, subGroupIndex, key)} style={{paddingLeft: 45}} className={classes.row}>
+                                                <div onClick={() => toggleShowSubGroup2(index, subGroupIndex, key)} style={{paddingLeft: 45, borderLeftWidth: 1}} className={classes.row}>
                                                   
                                                     {subgroup2.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
                                                   
                                                   <div className={classes.treeItem}>{subgroup2.name}</div>
                                                 </div>
                                                   {subgroup2.visible && subgroup2.items.map(item => (
-                                                    <div style={{paddingLeft: '50px'}} className={classes.row}>
+                                                    <div style={{paddingLeft: '50px', borderLeftWidth: 1}} className={classes.row}>
                                                     <Draggable index={item.id} draggableId={`account-${item.id}`}>
                                                       {(provided, snapshot) => (
                                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{item.name}</div>
