@@ -90,8 +90,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   rowWithDropdown: {
-    padding: '6.5px 14.75px 8.33px 15.75px',
+    height: 68,
+    // padding: '6.5px 14.75px 8.33px 15.75px',
+    padding: '6px 14.75px 0 15.75px',
     background: 'white',
+    alignItems: 'center',
     border: '1px solid #EDEDED',
     borderBottomWidth: 0,
     borderLeftWidth: 0,
@@ -275,106 +278,13 @@ function Table(props) {
     setTreeItems([...treeItems]);
   };
 
-  const reorder = (array) =>  {
-    let tmp = array[0];
-    array[0] = {
-      ...array[1],
-    };
-    array[1] = {
-      ...tmp,
-    }
-    return array;
-  };
-
-  // const moveItem = (from, to, array) =>  {
-  //   // const arr = ['1', '2'];
-    
-  //   let tmp = array[0];
-  //   array[0] = {
-  //     ...array[1],
-  //   };
-  //   array[1] = {
-  //     ...tmp,
-  //   }
-  //   // array.splice(to, 0, array.splice(from, 1)[0]);
-  //   return array;
-  // };
-
-  // const onDragEnd = (result) => {
-  //   const { destination, draggableId, source } = result;
-  //   if (!destination) {
-  //     return;
-  //   }
-
-  //   if (destination.droppableId === 'droppable') {
-  //     const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
-  //     setDraggable([...draggable,
-  //     {
-  //       name: `Account ${draggableId.split('-')[1]}`,
-  //       id: parseInt(draggableId.split('-')[1]),
-  //       tabId: selectedTab,
-  //     }
-  //   ]);
-  //   treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
-  //     ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
-  //   ]
-
-  //   setTreeItems([...treeItems]);
-  //   return;
-  //   }
-  //   if (draggableId.includes('account') && source.droppableId.includes('droppableGroup')) {
-
-  //     const [destname, destItemId, destSubgroupId, destSubgroup2Id] = destination.droppableId.split('-');
-  //     const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
-      // treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items = [
-      //   ...treeItems[destItemId].subgroups[destSubgroupId].subgroup2[destSubgroup2Id].items,
-      //   {
-      //     name: `Account ${draggableId.split('-')[1]}`,
-      //     id: parseInt(draggableId.split('-')[1]),
-      //     tabId: selectedTab,
-      //   }
-      // ];
-      // // const ind = treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.findIndex(i => i.id === +draggableId.split('-')[1])
-      // treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
-      //   ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== +draggableId.split('-')[1])
-      // ]
-  //     console.log(treeItems);
-  //     setTreeItems([...treeItems]);
-  //     return;
-
-  //   } 
-  //   if (source.droppableId === 'droppable') {
-  //     console.log('result', result);
-  //     const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
-
-      // treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items = [
-      //   ...treeItems[itemId].subgroups[subgroupId].subgroup2[subgroup2Id].items,
-      //   {
-      //     name: `Account ${source.index}`,
-      //     id: source.index,
-      //     tabId: selectedTab,
-      //   }
-      // ];
-      // setTreeItems([...treeItems]);
-  //     const [_, id] = draggableId.split('-');
-  //     const filtered = draggable.filter(el => el.id !== +id);
-  //     console.log(filtered);
-  //     setDraggable([...filtered]);
-  //     return;
-  //   }
-  //   if (source.droppableId.includes('droppableGroup')) {
-  //     const [name, itemId, subgroupId, subgroup2Id] = destination.droppableId.split('-');
-  //     const a = moveItem(source.index, destination.index, treeItems[itemId].subgroups[subgroupId].subgroup2);
-  //     treeItems[itemId].subgroups[subgroupId].subgroup2 = [...a];
-  //     setTreeItems([
-  //       ...treeItems
-  //     ]);
-  //   }
-  // };
-
   const onDragEnd = (result) => {
     const { destination, draggableId, source } = result;
+    console.log(result);
     if (!destination) {
+      return;
+    }
+    if (destination.droppableId === source.droppableId) {
       return;
     }
     if (source.droppableId.includes("Group") && destination.droppableId === 'droppable' && draggableId.includes('account')) {
@@ -388,17 +298,8 @@ function Table(props) {
         id: parseInt(draggId),
         tabId: parseInt(selectedTab),
       });
-      setDraggable(draggable);
-      return;
-    }
-    if (source.droppableId.includes("Group") && destination.droppableId.includes("Group") && !draggableId.includes('account')) {
-      const tmp = treeItems[1].subgroups[1].subgroup2[1];
-      treeItems[1].subgroups[1].subgroup2 = [
-        tmp,
-        treeItems[1].subgroups[1].subgroup2[0],
-      ]
-      console.log(treeItems[1].subgroups[1].subgroup2);
       setTreeItems([...treeItems]);
+      setDraggable(draggable);
       return;
     }
     if (source.droppableId === "droppable" && destination.droppableId.includes("Group")) {
@@ -413,8 +314,7 @@ function Table(props) {
         }
       ];
       const filteredDraggable = draggable.filter(d => d.id !== parseInt(draggId));
-      console.log(filteredDraggable);
-      setTreeItems(treeItems);
+      setTreeItems([...treeItems]);
       setDraggable(filteredDraggable);
       return;
     }
@@ -433,7 +333,7 @@ function Table(props) {
       treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items = [
         ...treeItems[sourceItemId].subgroups[sourceSubgroupId].subgroup2[sourceSubgroup2Id].items.filter(i => i.id !== parseInt(draggId))
       ]
-      setTreeItems(treeItems);
+      setTreeItems([...treeItems]);
       return;
     }
   }
@@ -492,7 +392,7 @@ function Table(props) {
   }
 
   const getBorderLeft = (index) => {
-    if (selectedTab === 3 && index === 0 && draggable.filter(d => d.tabId === selectedTab).length === 2) {
+    if ((index === 0 || index === 1) && draggable.filter(d => d.tabId === selectedTab).length === 0) {
       return 1;
     }
     if ((index === 0 || index === 1) && draggable.filter(d => d.tabId === selectedTab).length === 1) {
@@ -503,6 +403,19 @@ function Table(props) {
     }
     return 0;
   }
+
+  const getBorderRightDraggable = (kInd) => {
+    // if (kInd >= 3) {
+    //   return 0;
+    // }
+    return 1;
+  }
+  // const getBorderLeft1 = (index) => {
+  //   if (selectedTab === 2 && index === 0) {
+  //     return 0
+  //   }
+  //   return 
+  // }
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -549,9 +462,9 @@ function Table(props) {
                       {(provide, snapshot) => (
                         <div  {...provide.droppableProps} ref={provide.innerRef}>
                         {
-                            draggable.filter(d => d.tabId === selectedTab).map(k => (                             
-                            <div className={classes.row} style={{paddingLeft: 17, borderLeftWidth: 1}}>
-                              <Draggable index={k.id} draggableId={`account-${k.id}`}>
+                            draggable.filter(d => d.tabId === selectedTab).map((k, kInd) => (                             
+                            <div key={k.id} className={classes.row} style={{paddingLeft: 17, borderLeftWidth: 1, borderRightWidth: getBorderRightDraggable(kInd)}}>
+                              <Draggable key={k.id} index={kInd} draggableId={`account-${k.id}`}>
                                 {(provided, snapshot) => (
                                   <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{k.name}</div>
                                 )}
@@ -581,7 +494,7 @@ function Table(props) {
                         </div>
                         {group.visible && group.subgroups.map((subgroup, subGroupIndex) =>
                         <>
-                          <div onClick={() => toggleShowSubGroup(index, subGroupIndex)} style={{paddingLeft: 30, borderLeftWidth: selectedTab === 2 && subGroupIndex === 0 ? 0 : 1}} className={classes.row}>
+                          <div onClick={() => toggleShowSubGroup(index, subGroupIndex)} style={{paddingLeft: 30, borderLeftWidth: 1}} className={classes.row}>
                             {subgroup.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
                           <div className={classes.treeItem}>{subgroup.name}</div>
                           </div>
@@ -589,28 +502,22 @@ function Table(props) {
                                 {subgroup.visible && subgroup.subgroup2.map((subgroup2, key) =>
                                   <Droppable droppableId={`droppableGroup-${group.id}-${subgroup.id}-${subgroup2.id}`}>
                                     {(provided, snapshot) => (
-                                      <div style={{border: snapshot.isDraggingOver ?  '2px solid #F480B7' : 0}} {...provided.droppableProps} ref={provided.innerRef}>
-                                        <Draggable index={key} draggableId={key.toString()}>
-                                            {(provided, snapshot) => (
-                                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                <div onClick={() => toggleShowSubGroup2(index, subGroupIndex, key)} style={{paddingLeft: 45, borderLeftWidth: 1}} className={classes.row}>
-                                                  
-                                                    {subgroup2.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
-                                                  
-                                                  <div className={classes.treeItem}>{subgroup2.name}</div>
-                                                </div>
-                                                  {subgroup2.visible && subgroup2.items.map((item, itemInd) => (
-                                                    <div style={{paddingLeft: '50px', borderLeftWidth: 1}} className={classes.row}>
-                                                    <Draggable index={itemInd} draggableId={`account-${item.id}`}>
-                                                      {(provided, snapshot) => (
-                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{item.name}</div>
-                                                      )}
-                                                    </Draggable>
-                                                    </div>
-                                                  ))}
-                                              </div>
-                                            )}
-                                        </Draggable>
+                                      <div ref={provided.innerRef} {...provided.droppableProps}>
+                                        <div onClick={() => toggleShowSubGroup2(index, subGroupIndex, key)} style={{paddingLeft: 45, borderLeftWidth: 1, backgroundColor: snapshot.isDraggingOver ?  '#FFEFF7' : 'white'}} className={classes.row}>
+                                          
+                                            {subgroup2.visible ? <ArrowDropDownIcon /> : <ArrowRightIcon />}
+                                          
+                                          <div className={classes.treeItem}>{subgroup2.name}</div>
+                                        </div>
+                                          {subgroup2.visible && subgroup2.items.map((item, itemInd) => (
+                                            <div key={item.id} style={{paddingLeft: '50px', borderLeftWidth: 1}} className={classes.row}>
+                                            <Draggable key={item.id} index={itemInd} draggableId={`account-${item.id}`}>
+                                              {(provided, snapshot) => (
+                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={classes.accountItem}>{item.name}</div>
+                                              )}
+                                            </Draggable>
+                                            </div>
+                                          ))}
                                       </div>
                                     )}
                                   </Droppable>
