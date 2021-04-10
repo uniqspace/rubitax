@@ -290,7 +290,8 @@ function Table(props) {
       return;
     }
     if ((destination.droppableId === source.droppableId) && destination.droppableId.includes('Group')) {
-      arraymove(source.index, destination.index, treeItems[1].subgroups[1].subgroup2[1].items);
+      const [sourcename, sourceItemId, sourceSubgroupId, sourceSubgroup2Id] = source.droppableId.split('-');
+      arraymove(source.index, destination.index, treeItems[1].subgroups[1].subgroup2[sourceSubgroup2Id].items);
       return;
     }
     if (source.droppableId.includes("Group") && destination.droppableId === 'droppable' && draggableId.includes('account')) {
@@ -417,6 +418,7 @@ function Table(props) {
     return 1;
   }
 
+  const filteredDraggable = draggable.filter(d => d.tabId === selectedTab);
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -473,7 +475,29 @@ function Table(props) {
                             </div>
                             ))
                         }
-                        
+                        {
+                          !visible && !filteredDraggable.length &&  <div style={{ borderLeftWidth: 1, borderRightWidth: 0 }} className={classes.row}></div>
+                        }
+                        {
+                          visible && treeItems[1].visible && [...Array(3 - parseInt(filteredDraggable.length) + 2).keys()].map(k => (
+                            <div style={{ borderLeftWidth: 1, borderRightWidth: 0 }} className={classes.row}></div>
+                          ))
+                        }
+                        {
+                          visible && treeItems[1].visible && treeItems[1].subgroups[1].visible && [...Array(2).keys()].map(k => (
+                            <div style={{ borderLeftWidth: 1, borderRightWidth: 0 }} className={classes.row}></div>
+                          ))
+                        }
+                        {
+                          visible && treeItems[1].subgroups[1].visible && treeItems[1].subgroups[1].subgroup2[0].visible && [...Array(parseInt(treeItems[1].subgroups[1].subgroup2[0].items.length)).keys()].map(k => (
+                            <div style={{ borderLeftWidth: 1, borderRightWidth: 0 }} className={classes.row}></div>
+                          ))
+                        }
+                        {
+                          visible && treeItems[1].subgroups[1].visible && treeItems[1].subgroups[1].subgroup2[1].visible && [...Array(parseInt(treeItems[1].subgroups[1].subgroup2[1].items.length)).keys()].map(k => (
+                            <div style={{ borderLeftWidth: 1, borderRightWidth: 0 }} className={classes.row}></div>
+                          ))
+                        }
                         </div>
                       )}
                     </Droppable>
