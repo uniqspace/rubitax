@@ -278,13 +278,19 @@ function Table(props) {
     setTreeItems([...treeItems]);
   };
 
+  const arraymove = (fromIndex, toIndex, arr) => {
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+    return arr;
+}
   const onDragEnd = (result) => {
     const { destination, draggableId, source } = result;
-    console.log(result);
     if (!destination) {
       return;
     }
-    if (destination.droppableId === source.droppableId) {
+    if ((destination.droppableId === source.droppableId) && destination.droppableId.includes('Group')) {
+      arraymove(source.index, destination.index, treeItems[1].subgroups[1].subgroup2[1].items);
       return;
     }
     if (source.droppableId.includes("Group") && destination.droppableId === 'droppable' && draggableId.includes('account')) {
@@ -410,12 +416,7 @@ function Table(props) {
     // }
     return 1;
   }
-  // const getBorderLeft1 = (index) => {
-  //   if (selectedTab === 2 && index === 0) {
-  //     return 0
-  //   }
-  //   return 
-  // }
+
   return (
     <DragDropContext onDragEnd={onDragEnd} >
       <div className={classes.root}>
@@ -472,6 +473,7 @@ function Table(props) {
                             </div>
                             ))
                         }
+                        
                         </div>
                       )}
                     </Droppable>
